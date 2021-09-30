@@ -1,0 +1,25 @@
+freebsd_instance:
+  image_family: freebsd-13-0
+
+# https://bugzilla.readthedocs.io/en/latest/installing/quick-start.html
+task:
+  env:
+    BZ_ROOT_DIR: /usr/local/www/bugzilla
+
+  install_prerequisites_script:
+    - pkg install -y apache24 bugzilla44 mysql57-server p5-DBD-mysql
+  download_bugzilla_script:
+    - cp -a ${CIRRUS_WORKING_DIR} ${BZ_ROOT_DIR}
+  configure_mysql_script:
+    - sh .cirrus/configure_mysql.sh
+  configure_apache_script:
+    - sh .cirrus/configure_apache.sh
+  check_setup_script:
+    - ${BZ_ROOT_DIR}/checksetup.pl
+  edit_localconfig_script:
+    - sed -i '' "/db_pass/s/'';/'${db_pass}';/" ${BZ_ROOT_DIR}/localconfig
+  check_setup_again_script:
+    - ${BZ_ROOT_DIR}/checksetup.pl ${CIRRUS_WORKING_DIR}/.cirrus/checksetup_answers.txt
+  test_server_script:
+    - cd ${BZ_ROOT_DIR}
+    - ./testserver.pl http://localhost/bugzilla

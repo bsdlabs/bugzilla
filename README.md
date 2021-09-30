@@ -1,3 +1,5 @@
+[![Build Status](https://api.cirrus-ci.com/github/bsdlabs/bugzilla.svg)](https://cirrus-ci.com/github/bsdlabs/bugzilla)
+
 # What is freebsd/bugzilla?
 
 freebsd/bugzilla is a set of changes and extensions for Bugzilla being used
